@@ -38,6 +38,7 @@ my %commits = ();
   }
   close($fh);
 }
+print "Current branch: $branch, prior branch: $prior\n";
 print Dumper(\@files);
 print Dumper(\%commits);
 
