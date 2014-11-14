@@ -8,6 +8,7 @@ use warnings;
 
 use Git;
 use Archive::Zip qw(:ERROR_CODES);
+use Data::Dumper;
 
 my $git = Git->repository();
 
@@ -37,6 +38,8 @@ my %commits = ();
   }
   close($fh);
 }
+print Dumper(\@files);
+print Dumper(\%commits);
 
 # find files common between @ & @{-1}
   # get files in current tree
