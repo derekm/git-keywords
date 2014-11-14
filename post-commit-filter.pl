@@ -33,7 +33,7 @@ if (-d $temp_path && -f $temp_path.'/files') {
   open(my $fh, '<', $temp_path.'/files');
   while (<$fh>) {
       push @files, $_;
-my $commit = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
+my $commit = `git log -1 --format=%H $branch -- $_`;
 print "Commit, dawg: $commit\n";
       $commits{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
   }
