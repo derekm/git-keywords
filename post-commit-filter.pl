@@ -16,13 +16,13 @@ if (!defined $git) {
     exit 1;
 }
 
-my $branch = $git->command('symbolic-ref', '--short', 'HEAD');
+my $branch = $git->command_oneline('symbolic-ref', '--short', 'HEAD');
 
 if (!$branch) { # if detached head, get commit hash
-    $branch = $git->command('rev-parse', 'HEAD');
+    $branch = $git->command_oneline('rev-parse', 'HEAD');
 }
 
-my $prior = $git->command('check-ref-format', '--branch', '@{-1}'); # works for branch or commit
+my $prior = $git->command_oneline('check-ref-format', '--branch', '@{-1}'); # works for branch or commit
 
 my $temp_path = $git->repo_path() . '/' . 'keywords';
 
@@ -33,7 +33,7 @@ my %commits = ();
   open(my $fh, '<', $temp_path.'/files');
   while (<$fh>) {
       push @files, $_;
-      $commits{$_} = $git->command('log', '-1', '--format=%H', $branch, '--', $_);
+      $commits{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
   }
   close($fh);
 }
@@ -55,12 +55,12 @@ my @intersect = ();
 # find current branch's commits for common files
 my %antecedent = ();
 map {
-    $antecedent{$_} = $git->command('log', '-1', '--format=%H', $branch, '--', $_)
+    $antecedent{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_)
 } @intersect;
 
 # find files common between @ & @{-1} where latest commits differ
 map {
-    $antecedent{$_} ne $git->command('log', '-1', '--format=%H', $prior, '--', $_)
+    $antecedent{$_} ne $git->command_oneline('log', '-1', '--format=%H', $prior, '--', $_)
     and push @files, $_
     and $commits{$_} = $antecedent{$_}
 } @intersect;
