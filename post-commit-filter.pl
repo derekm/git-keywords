@@ -32,6 +32,7 @@ my %commits = ();
 if (-d $temp_path && -f $temp_path.'/files') {
   open(my $fh, '<', $temp_path.'/files');
   while (<$fh>) {
+      chomp;
       push @files, $_;
 my $commit = `git log -1 --format=%H $branch -- $_`;
 print "Commit, dawg: $commit\n";
