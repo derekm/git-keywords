@@ -27,11 +27,9 @@ my $prior = $git->command_oneline('check-ref-format', '--branch', '@{-1}'); # wo
 
 my $temp_path = $git->repo_path() . '/' . 'keywords';
 
-exit 1 unless (-d $temp_path && -f $temp_path.'/files');
-
 my @files = ();
 my %commits = ();
-{
+if (-d $temp_path && -f $temp_path.'/files') {
   open(my $fh, '<', $temp_path.'/files');
   while (<$fh>) {
       push @files, $_;
