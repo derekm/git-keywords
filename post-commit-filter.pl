@@ -8,7 +8,6 @@ use warnings;
 
 use Git;
 use Archive::Zip qw(:ERROR_CODES);
-use Data::Dumper;
 
 my $git = Git->repository();
 
@@ -34,15 +33,10 @@ if (-d $temp_path && -f $temp_path.'/files') {
   while (<$fh>) {
       chomp;
       push @files, $_;
-my $commit = `git log -1 --format=%H $branch -- $_`;
-print "Commit, dawg: $commit\n";
       $commits{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
   }
   close($fh);
 }
-print "Current branch: $branch, prior branch: $prior\n";
-print Dumper(\@files);
-print Dumper(\%commits);
 
 # find files common between @ & @{-1}
   # get files in current tree
