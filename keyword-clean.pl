@@ -11,9 +11,10 @@ my %config = (
 
 my @regex = ();
 my @subst = ();
+my $format = 'Format';
 for my $key (keys %config) {
   push @regex, qr/\$$key.*\$/;
-  push @subst, "\$$key: \$Format:$config{$key}\$ \$";
+  push @subst, "\$$key: \$$format:$config{$key}\$ \$";
 }
 
 while (<>) {
