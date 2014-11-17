@@ -78,7 +78,11 @@ for my $file (@files) {
     $zip->readFromFileHandle($zh) == AZ_OK or die 'Couldn\'t open original ' . $file . '.';
     $zip->extractMember($file);
     close($zh) or die 'Failed to close in-memory zip:' . $!;
+
+    $git->command('update-index', '--refresh', $file);
 }
+
+$git->command('update-index', '--really-refresh');
 
 unlink $temp_path.'/files';
 rmdir $temp_path;
