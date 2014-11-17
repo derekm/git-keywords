@@ -79,10 +79,11 @@ for my $file (@files) {
     $zip->extractMember($file);
     close($zh) or die 'Failed to close in-memory zip:' . $!;
 
-    $git->command('update-index', '--refresh', $file);
+#    $git->command('update-index', '--refresh', $file);
+    $git->command('update-index', $file);
 }
 
-$git->command('update-index', '--really-refresh');
+#$git->command('update-index', '--really-refresh');
 
 unlink $temp_path.'/files';
 rmdir $temp_path;
