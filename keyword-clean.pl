@@ -3,6 +3,7 @@
 # $Date: $Format:%ai$ $
 # $Revision: $Format:%h$ $
 
+my @allow = qw/Author Date Revision/;
 my %config = (
     Date => '%ai',
     Author => '%an <%ae>',
@@ -12,7 +13,7 @@ my %config = (
 my @regex = ();
 my @subst = ();
 my $format = 'Format';
-for my $key (keys %config) {
+for my $key (@allow) {
   push @regex, qr/\$$key.*\$/;
   push @subst, "\$$key: \$$format:$config{$key}\$ \$";
 }
