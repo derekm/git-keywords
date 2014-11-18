@@ -35,7 +35,7 @@ if (-d $keywords_path && -f $use_orig_head_path) {
 if ($use_orig_head) {
     my @new = ();
     for my $file (@files) {
-        -d $file && push @new, $file;
+        -e $file && push @new, $file;
     }
     @files = @new;
 }
