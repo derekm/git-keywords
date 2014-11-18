@@ -7,7 +7,7 @@ use strict;
 use warnings;
 
 use Git;
-use File::Path qw/make_path/;
+use File::Path;
 
 my ($file) = @ARGV;
 if (!$file) {
@@ -23,7 +23,7 @@ if (!defined $git) {
 
 my $temp_path = $git->repo_path() . '/' . 'keywords';
 if (!-d $temp_path) {
-    make_path($temp_path);
+    mkpath($temp_path);
 }
 
 open(my $fh, '>>', $temp_path.'/files');
