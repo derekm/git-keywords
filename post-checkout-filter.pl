@@ -35,13 +35,15 @@ my $temp_path = $git->repo_path() . '/' . 'keywords';
 my @files = ();
 my %commits = ();
 if (-d $temp_path && -f $temp_path.'/files') {
-  open(my $fh, '<', $temp_path.'/files');
-  while (<$fh>) {
-      chomp;
-      push @files, $_;
-      $commits{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
-  }
-  close($fh);
+    my %uniq = ();
+    open(my $fh, '<', $temp_path.'/files');
+    while (<$fh>) {
+        chomp;
+        ++$uniq{$_} == 1
+        and push @files, $_
+        and $commits{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
+    }
+    close($fh);
 }
 
 ##if (defined $prior) {
