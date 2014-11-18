@@ -7,7 +7,6 @@ use strict;
 use warnings;
 
 use Git;
-use Error qw(try);
 use Archive::Zip qw(:ERROR_CODES);
 
 my $git = Git->repository();
@@ -24,11 +23,11 @@ if (!$branch) { # if detached head, get commit hash
 }
 
 my $prior;
-try {
+if ($ARGV[2]) {
     # works for branch or commit
     # in a newly-cloned repo, there won't be a $prior branch
     $prior = $git->command_oneline('check-ref-format', '--branch', '@{-1}');
-};
+}
 
 my $temp_path = $git->repo_path() . '/' . 'keywords';
 
@@ -44,7 +43,7 @@ if (-d $temp_path && -f $temp_path.'/files') {
   close($fh);
 }
 
-if ($prior) {
+if (defined $prior) {
 
 # find files common between @ & @{-1}
   # get files in current tree
