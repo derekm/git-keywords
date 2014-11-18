@@ -7,7 +7,6 @@ use strict;
 use warnings;
 
 use Git;
-use File::Path;
 use Archive::Zip qw(:ERROR_CODES);
 
 my $git = Git->repository();
