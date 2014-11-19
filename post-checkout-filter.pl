@@ -39,7 +39,7 @@ if (-d $temp_path && -f $temp_path.'/files') {
     open(my $fh, '<', $temp_path.'/files');
     while (<$fh>) {
         chomp;
-        ++$uniq{$_} == 1
+        ++$uniq{$_} == 1 && -e
         and push @files, $_
         and $commits{$_} = $git->command_oneline('log', '-1', '--format=%H', $branch, '--', $_);
     }
@@ -95,5 +95,6 @@ for my $file (@files) {
 }
 
 unlink $temp_path.'/files';
+# TODO FIXME may need to unlink use_orig_head file
 rmdir $temp_path;
 
