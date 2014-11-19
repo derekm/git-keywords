@@ -32,11 +32,7 @@ if (-d $keywords_path && -f $use_orig_head_path) {
 # full file list from ORIG_HEAD to HEAD
 # could contain renamed or deleted files
 if ($use_orig_head) {
-    my @new = ();
-    for my $file (@files) {
-        -e $file && push @new, $file;
-    }
-    @files = @new;
+    @files = grep { -e } @files;
 }
 
 # extract files that were in the latest commit
@@ -58,5 +54,5 @@ for my $file (@files) {
 }
 
 unlink $use_orig_head_path if $use_orig_head;
-rmdir $keywords_path;
+rmdir $keywords_path if -d $keywords_path;
 
