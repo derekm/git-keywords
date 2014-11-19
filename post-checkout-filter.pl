@@ -16,19 +16,8 @@ if (!defined $git) {
     exit 1;
 }
 
-#my $branch = $git->command_oneline('symbolic-ref', '--short', 'HEAD');
-#
-#if (!$branch) { # if detached head, get commit hash
-#    $branch = $git->command_oneline('rev-parse', 'HEAD');
-#}
 my $branch = $ARGV[1];
-
 my $prior = $ARGV[0];
-#if ($ARGV[2]) {
-#    # works for branch or commit
-#    # in a newly-cloned repo, there won't be a $prior branch
-#    $prior = $git->command_oneline('check-ref-format', '--branch', '@{-1}');
-#}
 
 my $repo_path = $git->repo_path();
 my $keywords_path = $repo_path.'/keywords';
