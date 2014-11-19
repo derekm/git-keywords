@@ -46,8 +46,6 @@ if (-d $temp_path && -f $temp_path.'/files') {
     close($fh);
 }
 
-##if (defined $prior) {
-
 # find files common between @ & @{-1}
   # get files in current tree
   # remove files the smudge filter wanted to process
@@ -74,8 +72,6 @@ map {
     and push @files, $_
     and $commits{$_} = $antecedent{$_}
 } @intersect;
-
-##}
 
 # extract files that smudge filter wanted to process
 # along with the common files where commits differed
