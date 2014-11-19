@@ -30,13 +30,15 @@ my $prior = $ARGV[0];
 #    $prior = $git->command_oneline('check-ref-format', '--branch', '@{-1}');
 #}
 
-my $temp_path = $git->repo_path() . '/' . 'keywords';
+my $repo_path = $git->repo_path();
+my $keywords_path = $repo_path.'/keywords';
+my $files_path = $keywords_path.'/files';
 
 my @files = ();
 my %commits = ();
-if (-d $temp_path && -f $temp_path.'/files') {
+if (-d $keywords_path && -f $files_path) {
     my %uniq = ();
-    open(my $fh, '<', $temp_path.'/files');
+    open(my $fh, '<', $files_path);
     while (<$fh>) {
         chomp;
         ++$uniq{$_} == 1 && -e
@@ -90,7 +92,7 @@ for my $file (@files) {
     $git->command('update-index', $file);
 }
 
-unlink $temp_path.'/files';
+unlink $files_path;
 # TODO FIXME may need to unlink use_orig_head file
-rmdir $temp_path;
+rmdir $keywords_path;
 
