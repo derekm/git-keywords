@@ -81,7 +81,8 @@ for my $file (@files) {
     $git->command('update-index', $file);
 }
 
+my $use_orig_head_path = $keywords_path.'/use_orig_head';
 unlink $files_path;
-# TODO FIXME may need to unlink use_orig_head file
+unlink $use_orig_head_path if -e $use_orig_head_path;
 rmdir $keywords_path;
 

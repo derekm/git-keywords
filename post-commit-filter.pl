@@ -53,7 +53,8 @@ for my $file (@files) {
     $git->command('update-index', $file);
 }
 
+my $files_path = $keywords_path.'/files';
 unlink $use_orig_head_path if $use_orig_head;
-# TODO FIXME may need to unlink files file
+unlink $files_path if -e $files_path;
 rmdir $keywords_path if -d $keywords_path;
 
