@@ -54,5 +54,6 @@ for my $file (@files) {
 }
 
 unlink $use_orig_head_path if $use_orig_head;
+# TODO FIXME may need to unlink files file
 rmdir $keywords_path if -d $keywords_path;
 
