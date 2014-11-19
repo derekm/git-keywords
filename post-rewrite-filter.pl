@@ -20,7 +20,7 @@ my %uniq = ();
 {
   my $commit;
   while (<STDIN>) {
-      my $commit = (split)[1]
+      $commit = (split)[1]
       and ++$uniq{$commit} == 1
       and push @commits, $commit;
   }
@@ -32,21 +32,6 @@ my @files = grep {
             } map {
               $git->command('diff-tree', '--no-commit-id', '--name-only', '-r', $_)
             } @commits;
-
-# the smudge filter may notify us of files from
-# our own shifted commits
-my $repo_path = $git->repo_path();
-my $keywords_path = $repo_path.'/keywords';
-my $files_path = $keywords_path.'/files';
-if (-d $keywords_path && -f $files_path) {
-    open(my $fh, '<', $files_path);
-    while (<$fh>) {
-        chomp;
-        ++$uniq{$_} == 1 && -e
-        and push @files, $_;
-    }
-    close($fh);
-}
 
 # extract extant files following an amend or rebase
 for my $file (@files) {
@@ -65,7 +50,12 @@ for my $file (@files) {
     $git->command('update-index', $file);
 }
 
-unlink $files_path;
+my $repo_path = $git->repo_path();
+my $keywords_path = $repo_path.'/keywords';
+my $files_path = $keywords_path.'/files';
+#my $use_orig_head_path = $keywords_path.'/use_orig_head';
+unlink $files_path if -e $files_path;
 # TODO FIXME may need to unlink use_orig_head file
-rmdir $keywords_path;
+#unlink $use_orig_head_path if -e $use_orig_head_path;
+rmdir $keywords_path if -d $keywords_path;
 
