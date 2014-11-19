@@ -44,6 +44,6 @@ for my $file (@files) {
 my $repo_path = $git->repo_path();
 my $keywords_path = $repo_path.'/keywords';
 my $use_orig_head_path = $keywords_path.'/use_orig_head';
-unlink $use_orig_head_path if $use_orig_head;
+unlink $use_orig_head_path if -e $use_orig_head_path;
 rmdir $keywords_path if -d $keywords_path;
 
