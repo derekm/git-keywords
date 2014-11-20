@@ -27,7 +27,7 @@ my @files = $git->command('diff-tree', '--name-only', '-r', 'ORIG_HEAD', 'HEAD')
 # extract extant files following a merge
 for my $file (@files) {
     my $commit = $git->command_oneline('log', '-1', '--format=%H', 'HEAD', '--', $file);
-    my ($fh, $ctx) = $git->command_output_pipe('archive', '--format=zip', '-0', $commit, $file);
+    my ($fh, $ctx) = $git->command_output_pipe('archive', '--worktree-attributes', '--format=zip', '-0', $commit, $file);
     my $zip_file = do { local $/; <$fh> };
     $git->command_close_pipe($fh, $ctx);
 

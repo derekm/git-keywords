@@ -67,7 +67,7 @@ map {
 # extract files that smudge filter wanted to process
 # along with the common files where commits differed
 for my $file (@files) {
-    my ($fh, $ctx) = $git->command_output_pipe('archive', '--format=zip', '-0', $commits{$file}, $file);
+    my ($fh, $ctx) = $git->command_output_pipe('archive', '--worktree-attributes', '--format=zip', '-0', $commits{$file}, $file);
     my $zip_file = do { local $/; <$fh> };
     $git->command_close_pipe($fh, $ctx);
 
