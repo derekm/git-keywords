@@ -35,6 +35,13 @@ if ($use_orig_head) {
     @files = grep { -e } @files;
 }
 
+# preserve any working copy changes that weren't staged for commit
+# don't want to overwrite pending changes if 'add -p' or similar
+my $diff = !!$git->command('diff', '--name-only');
+if ($diff) {
+    $git->command('stash', '--keep-index', '-q');
+}
+
 # extract files that were in the latest commit
 # or extant files following a merge resolution
 for my $file (@files) {
@@ -51,6 +58,18 @@ for my $file (@files) {
     close($zh) or die 'Failed to close in-memory zip:' . $!;
 
     $git->command('update-index', $file);
+}
+
+if ($diff) {
+    my ($out, $outctx) = $git->command_output_pipe('stash', 'show', '-p');
+    open(my $in, '|-', 'patch', '-p1', '-s');
+    while (<$out>) {
+        print $in $_;
+    }
+    $git->command_close_pipe($out, $outctx);
+    close($in);
+
+    $git->command('stash', 'drop', '-q');
 }
 
 my $files_path = $keywords_path.'/files';
